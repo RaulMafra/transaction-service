@@ -1,0 +1,46 @@
+package com.safeway.test.service;
+
+import com.safeway.test.domain.user.Client;
+import com.safeway.test.domain.user.Company;
+import com.safeway.test.dtos.CompanyDTO;
+import com.safeway.test.dtos.TransactionDTO;
+import com.safeway.test.repository.CompanyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CompanyService {
+
+    private final CompanyRepository companyRepository;
+
+    @Autowired
+    private CompanyService(CompanyRepository companyRepository){
+        this.companyRepository = companyRepository;
+    }
+
+    public void createCompany(CompanyDTO companyDTO){
+        Company newCompany = new Company(companyDTO);
+        this.checkFields(newCompany);
+        this.saveCompany(newCompany);
+    }
+
+    private void checkFields(Company company){
+        if(company.getDocument().length() != 11){
+            throw new RuntimeException("O CPF deve ter 11 dígitos!");
+        }
+    }
+
+    public Company getCompany(TransactionDTO transactionDTO){
+        return companyRepository.findCompanyById(transactionDTO.idCompany()).orElseThrow(() -> new RuntimeException("Company not found"));
+    }
+
+    public void saveCompany(Company company){
+        companyRepository.save(company);
+    }
+
+    public List<Company> listAllCompanies(){
+        return companyRepository.findAll();
+    }
+}
