@@ -26,15 +26,13 @@ public class UserController {
 
     @PostMapping("/create-client")
     public ResponseEntity<ResponseDTO> createClient(@RequestBody ClientDTO clientDTO){
-        Client client = new Client(clientDTO);
-        clientService.saveClient(client);
+        clientService.createClient(clientDTO);
         return new ResponseEntity<>(new ResponseDTO("Cliente criado!"), HttpStatus.CREATED);
     }
 
     @PostMapping("/create-company")
     public ResponseEntity<ResponseDTO> createCompany(@RequestBody CompanyDTO companyDTO){
-        Company company = new Company(companyDTO);
-        companyService.saveCompany(company);
+        companyService.createCompany(companyDTO);
         return new ResponseEntity<>(new ResponseDTO("Empresa criada!"), HttpStatus.CREATED);
     }
 

@@ -1,6 +1,5 @@
 package com.safeway.test.service;
 
-import com.safeway.test.domain.user.Client;
 import com.safeway.test.domain.user.Company;
 import com.safeway.test.dtos.CompanyDTO;
 import com.safeway.test.dtos.TransactionDTO;
@@ -27,8 +26,8 @@ public class CompanyService {
     }
 
     private void checkFields(Company company){
-        if(company.getDocument().length() != 11){
-            throw new RuntimeException("O CPF deve ter 11 dígitos!");
+        if(company.getDocument().length() != 14){
+            throw new RuntimeException("O CNPJ deve ter 14 dígitos!");
         }
     }
 

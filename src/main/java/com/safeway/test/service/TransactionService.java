@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Service
 public class TransactionService {
@@ -67,17 +66,15 @@ public class TransactionService {
 
     }
 
-    private boolean checkBalanceClient(Client client, Transaction deposit) {
+    private void checkBalanceClient(Client client, Transaction deposit) {
         if (client.getBalance().compareTo(deposit.getValue()) < 0) {
             throw new RuntimeException("Saldo insuficiente");
         }
-        return true;
     }
 
-    private boolean checkBalanceCompany(Company company, Transaction withdraw) {
+    private void checkBalanceCompany(Company company, Transaction withdraw) {
         if (company.getBalance().compareTo(withdraw.getValue()) < 0) {
             throw new RuntimeException("Saldo insuficiente");
         }
-        return true;
     }
 }

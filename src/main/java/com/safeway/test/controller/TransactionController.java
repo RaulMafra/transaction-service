@@ -1,6 +1,5 @@
 package com.safeway.test.controller;
 
-import com.safeway.test.domain.transaction.Transaction;
 import com.safeway.test.dtos.ResponseDTO;
 import com.safeway.test.dtos.TransactionDTO;
 import com.safeway.test.service.TransactionService;
