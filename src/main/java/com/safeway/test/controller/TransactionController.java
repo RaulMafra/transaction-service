@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/transaction")
+@RequestMapping("/safeway/v1/transaction")
 public class TransactionController {
 
     @Autowired

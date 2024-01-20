@@ -2,8 +2,7 @@ package com.safeway.test.controller;
 
 import com.safeway.test.domain.user.Client;
 import com.safeway.test.domain.user.Company;
-import com.safeway.test.dtos.ClientDTO;
-import com.safeway.test.dtos.CompanyDTO;
+import com.safeway.test.dtos.UserDTO;
 import com.safeway.test.dtos.ResponseDTO;
 import com.safeway.test.service.ClientService;
 import com.safeway.test.service.CompanyService;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/safeway/v1/users")
 public class UserController {
 
     @Autowired
@@ -25,14 +24,14 @@ public class UserController {
     private CompanyService companyService;
 
     @PostMapping("/create-client")
-    public ResponseEntity<ResponseDTO> createClient(@RequestBody ClientDTO clientDTO){
-        clientService.createClient(clientDTO);
+    public ResponseEntity<ResponseDTO> createClient(@RequestBody UserDTO userDTO){
+        clientService.createClient(userDTO);
         return new ResponseEntity<>(new ResponseDTO("Cliente criado!"), HttpStatus.CREATED);
     }
 
     @PostMapping("/create-company")
-    public ResponseEntity<ResponseDTO> createCompany(@RequestBody CompanyDTO companyDTO){
-        companyService.createCompany(companyDTO);
+    public ResponseEntity<ResponseDTO> createCompany(@RequestBody UserDTO company){
+        companyService.createCompany(company);
         return new ResponseEntity<>(new ResponseDTO("Empresa criada!"), HttpStatus.CREATED);
     }
 
