@@ -1,7 +1,7 @@
 package com.safeway.test.service;
 
 import com.safeway.test.domain.user.Client;
-import com.safeway.test.dtos.ClientDTO;
+import com.safeway.test.dtos.UserDTO;
 import com.safeway.test.dtos.TransactionDTO;
 import com.safeway.test.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public void createClient(ClientDTO clientDTO) {
-        Client newClient = new Client(clientDTO);
+    public void createClient(UserDTO userDTO) {
+        Client newClient = new Client(userDTO);
         this.checkFields(newClient);
         this.saveClient(newClient);
     }

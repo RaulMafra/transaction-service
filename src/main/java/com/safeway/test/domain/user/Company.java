@@ -1,7 +1,6 @@
 package com.safeway.test.domain.user;
 
-import com.safeway.test.dtos.ClientDTO;
-import com.safeway.test.dtos.CompanyDTO;
+import com.safeway.test.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,10 +28,10 @@ public class Company {
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    public Company(CompanyDTO companyDTO){
-        this.name = companyDTO.name();
-        this.document = companyDTO.document();
-        this.email = companyDTO.email();
-        this.balance = companyDTO.balance();
+    public Company(UserDTO company){
+        this.name = company.name();
+        this.document = company.document();
+        this.email = company.email();
+        this.balance = company.balance();
     }
 }

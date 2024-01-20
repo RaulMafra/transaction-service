@@ -1,6 +1,6 @@
 package com.safeway.test.domain.user;
 
-import com.safeway.test.dtos.ClientDTO;
+import com.safeway.test.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +29,11 @@ public class Client {
     protected BigDecimal balance;
 
 
-    public Client(ClientDTO clientDTO){
-        this.name = clientDTO.name();
-        this.document = clientDTO.document();
-        this.email = clientDTO.email();
-        this.balance = clientDTO.balance();
+    public Client(UserDTO userDTO){
+        this.name = userDTO.name();
+        this.document = userDTO.document();
+        this.email = userDTO.email();
+        this.balance = userDTO.balance();
     }
 
 }

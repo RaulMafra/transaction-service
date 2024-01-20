@@ -1,8 +1,8 @@
 package com.safeway.test.service;
 
 import com.safeway.test.domain.user.Company;
-import com.safeway.test.dtos.CompanyDTO;
 import com.safeway.test.dtos.TransactionDTO;
+import com.safeway.test.dtos.UserDTO;
 import com.safeway.test.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public void createCompany(CompanyDTO companyDTO){
-        Company newCompany = new Company(companyDTO);
+    public void createCompany(UserDTO company){
+        Company newCompany = new Company(company);
         this.checkFields(newCompany);
         this.saveCompany(newCompany);
     }

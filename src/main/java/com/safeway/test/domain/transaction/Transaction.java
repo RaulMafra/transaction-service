@@ -2,7 +2,6 @@ package com.safeway.test.domain.transaction;
 
 import com.safeway.test.domain.user.Client;
 import com.safeway.test.domain.user.Company;
-import com.safeway.test.dtos.TransactionDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
