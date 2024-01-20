@@ -1,13 +1,14 @@
 package com.safeway.test.service;
 
 import com.amazonaws.services.simpleemail.model.AmazonSimpleEmailServiceException;
+import com.safeway.test.callback.service.WebhookService;
 import com.safeway.test.domain.transaction.Transaction;
 import com.safeway.test.domain.transaction.TransactionType;
 import com.safeway.test.domain.user.Client;
 import com.safeway.test.domain.user.Company;
+import com.safeway.test.dtos.ResponseCompanyDTO;
 import com.safeway.test.dtos.TransactionDTO;
 import com.safeway.test.emailservice.provider.ses.SesEmailSending;
-import com.safeway.test.emailservice.provider.ses.config.Sesconfig;
 import com.safeway.test.emailservice.service.EmailSendingService;
 import com.safeway.test.repository.TrasactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class TransactionService {
     @Autowired
     private EmailSendingService emailSendingService;
 
+    @Autowired
+    private WebhookService webhookService;
 
     public void createDeposit(TransactionDTO transactionDTO) {
         if (!(transactionDTO.transactionType().equals(TransactionType.DEPOSIT))) {
@@ -46,6 +49,7 @@ public class TransactionService {
         company.setBalance(company.getBalance().add(deposit.getValue().subtract(tax)));
         client.setBalance(client.getBalance().subtract(deposit.getValue()));
 
+        webhookService.sendInfoTransaction(new ResponseCompanyDTO(deposit));
         try {
             this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Status depósito", "Depósito realizado com sucesso!");
         } catch (AmazonSimpleEmailServiceException e) {
@@ -54,6 +58,7 @@ public class TransactionService {
         clientService.saveClient(client);
         companyService.saveCompany(company);
         trasactionRepository.save(deposit);
+
 
     }
 
@@ -72,6 +77,7 @@ public class TransactionService {
         company.setBalance(company.getBalance().subtract(withdraw.getValue().add(tax)));
         client.setBalance(client.getBalance().add(withdraw.getValue()));
 
+        webhookService.sendInfoTransaction(new ResponseCompanyDTO(withdraw));
         try {
             this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Status saque", "Saque realizado com sucesso!");
         } catch (AmazonSimpleEmailServiceException e) {
