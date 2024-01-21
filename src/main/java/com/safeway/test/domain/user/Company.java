@@ -21,7 +21,7 @@ public class Company {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "document", unique = true, nullable = false)
+    @Column(name = "document", unique = true, nullable = false, length = 14)
     private String document;
     @Column(name = "email", unique = true, nullable = false)
     private String email;

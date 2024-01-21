@@ -18,15 +18,15 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_client")
-    protected Long id;
+    private Long id;
     @Column(name = "name", nullable = false)
-    protected String name;
+    private String name;
     @Column(name = "document", unique = true, nullable = false)
-    protected String document;
-    @Column(name = "email", unique = true, nullable = false)
-    protected String email;
+    private String document;
+    @Column(name = "email", unique = true, nullable = false, length = 11)
+    private String email;
     @Column(name = "balance", nullable = false)
-    protected BigDecimal balance;
+    private BigDecimal balance;
 
 
     public Client(UserDTO userDTO){
