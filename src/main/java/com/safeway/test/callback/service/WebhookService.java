@@ -20,7 +20,6 @@ public class WebhookService {
     private String url;
 
     public void sendInfoTransaction(ResponseCompanyDTO responseCompanyDTO){
-        System.out.println(url);
         HttpEntity<ResponseCompanyDTO> request = new HttpEntity<>(responseCompanyDTO);
         restTemplate.exchange(url, HttpMethod.POST, request, String.class);
     }

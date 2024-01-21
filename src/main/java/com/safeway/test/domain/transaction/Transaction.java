@@ -1,5 +1,6 @@
 package com.safeway.test.domain.transaction;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.safeway.test.domain.user.Client;
 import com.safeway.test.domain.user.Company;
 import jakarta.persistence.*;
@@ -33,6 +34,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "id_company")
     private Company company;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "timestamp")
     private LocalDateTime timestamp;
     @Enumerated(EnumType.STRING)
