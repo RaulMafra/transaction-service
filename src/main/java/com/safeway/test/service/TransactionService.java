@@ -58,11 +58,8 @@ public class TransactionService {
         company.setBalance(company.getBalance().add(deposit.getValue().subtract(tax)));
         client.setBalance(client.getBalance().subtract(deposit.getValue()));
 
-//        try {
-//            this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Status depósito", "Depósito realizado com sucesso!");
-//        } catch (AmazonSimpleEmailServiceException e) {
-//            throw new AmazonSimpleEmailServiceException(e.getMessage());
-//        }
+        this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Status depósito", "Depósito realizado com sucesso!");
+
         clientService.saveClient(client);
         companyService.saveCompany(company);
         transactionRepository.save(deposit);
@@ -86,11 +83,8 @@ public class TransactionService {
         company.setBalance(company.getBalance().subtract(withdraw.getValue().add(tax)));
         client.setBalance(client.getBalance().add(withdraw.getValue()));
 
-        try {
-            this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Status saque", "Saque realizado com sucesso!");
-        } catch (AmazonSimpleEmailServiceException e) {
-            throw new AmazonSimpleEmailServiceException(e.getMessage());
-        }
+        this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Status saque", "Saque realizado com sucesso!");
+
         clientService.saveClient(client);
         companyService.saveCompany(company);
         transactionRepository.save(withdraw);

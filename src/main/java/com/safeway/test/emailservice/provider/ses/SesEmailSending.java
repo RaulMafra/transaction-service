@@ -1,5 +1,6 @@
 package com.safeway.test.emailservice.provider.ses;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.model.*;
 import com.safeway.test.emailservice.adapters.EmailSendingGateway;
@@ -29,7 +30,7 @@ public class SesEmailSending implements EmailSendingGateway {
         try{
             this.amazonSimpleEmailService.sendEmail(request);
         } catch(AmazonSimpleEmailServiceException e){
-            throw new AmazonSimpleEmailServiceException(e.getMessage());
+            throw new AmazonClientException(e.getMessage());
         }
 
     }
