@@ -1,7 +1,6 @@
 package com.safeway.test.callback.service;
 
 import com.safeway.test.dtos.ResponseCompanyDTO;
-import com.safeway.test.exception.exceptions.RestException;
 import com.safeway.test.exception.exceptions.WebhookException;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 @Service
 @Setter

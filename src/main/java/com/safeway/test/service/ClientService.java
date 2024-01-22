@@ -1,17 +1,14 @@
 package com.safeway.test.service;
 
 import com.safeway.test.domain.user.Client;
-import com.safeway.test.dtos.UserDTO;
 import com.safeway.test.dtos.TransactionDTO;
+import com.safeway.test.dtos.UserDTO;
 import com.safeway.test.exception.exceptions.IllegalFormattingException;
 import com.safeway.test.exception.exceptions.RestException;
 import com.safeway.test.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.IllegalFormatConversionException;
-import java.util.IllegalFormatException;
-import java.util.IllegalFormatPrecisionException;
 import java.util.List;
 
 @Service

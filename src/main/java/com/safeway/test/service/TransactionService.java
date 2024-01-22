@@ -11,7 +11,6 @@ import com.safeway.test.emailservice.provider.ses.SesEmailSending;
 import com.safeway.test.emailservice.service.EmailSendingService;
 import com.safeway.test.exception.exceptions.RestException;
 import com.safeway.test.repository.TransactionRepository;
-import jakarta.persistence.Enumerated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

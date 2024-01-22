@@ -1,11 +1,11 @@
 package com.safeway.test.exception.handle;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.Response;
 import com.safeway.test.exception.exceptions.IllegalFormattingException;
 import com.safeway.test.exception.exceptions.RestException;
 import com.safeway.test.exception.exceptions.WebhookException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.net.UnknownHostException;
-import java.util.IllegalFormatException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,6 +50,13 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ResponseError> handleRestApiException(RestException e, WebRequest request, HttpServletRequest servletRequest){
         ResponseError responseError = new ResponseError(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND, e.getMessage(), servletRequest.getRequestURI());
         return new ResponseEntity<>(responseError, headers(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    private ResponseEntity<ResponseError> handleDataPersistence(DataIntegrityViolationException e, WebRequest request, HttpServletRequest servletRequest){
+        String response = "O documento ou o email ja esta em uso";
+        ResponseError responseError = new ResponseError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST, response, servletRequest.getRequestURI());
+        return new ResponseEntity<>(responseError, headers(), HttpStatus.BAD_REQUEST);
     }
 
 }
