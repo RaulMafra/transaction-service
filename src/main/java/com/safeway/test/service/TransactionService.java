@@ -1,6 +1,5 @@
 package com.safeway.test.service;
 
-import com.amazonaws.services.simpleemail.model.AmazonSimpleEmailServiceException;
 import com.safeway.test.callback.service.WebhookService;
 import com.safeway.test.domain.transaction.Transaction;
 import com.safeway.test.domain.transaction.TransactionType;
@@ -10,20 +9,15 @@ import com.safeway.test.dtos.ResponseCompanyDTO;
 import com.safeway.test.dtos.TransactionDTO;
 import com.safeway.test.emailservice.provider.ses.SesEmailSending;
 import com.safeway.test.emailservice.service.EmailSendingService;
+import com.safeway.test.exception.exceptions.RestException;
 import com.safeway.test.repository.TransactionRepository;
-import jakarta.persistence.EntityManager;
+import jakarta.persistence.Enumerated;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.ClientInfoStatus;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -45,7 +39,7 @@ public class TransactionService {
 
     public void createDeposit(TransactionDTO transactionDTO) {
         if (!(transactionDTO.transactionType().equals(TransactionType.DEPOSIT))) {
-            throw new RuntimeException("O tipo da transação não é depósito");
+            throw new RestException("O tipo da transacao nao e deposito");
         }
         Company company = companyService.getCompany(transactionDTO);
         Client client = clientService.getClient(transactionDTO);
@@ -70,7 +64,7 @@ public class TransactionService {
 
     public void createWithdraw(TransactionDTO transactionDTO) {
         if (!(transactionDTO.transactionType().equals(TransactionType.WITHDRAW))) {
-            throw new RuntimeException("O tipo da transação não é saque");
+            throw new RestException("O tipo da transacao nao e saque");
         }
         Company company = companyService.getCompany(transactionDTO);
         Client client = clientService.getClient(transactionDTO);
@@ -95,13 +89,13 @@ public class TransactionService {
 
     private void checkBalanceClient(Client client, Transaction deposit) {
         if (client.getBalance().compareTo(deposit.getValue()) < 0) {
-            throw new RuntimeException("Saldo insuficiente");
+            throw new RestException("Saldo do cliente insuficiente");
         }
     }
 
     private void checkBalanceCompany(Company company, Transaction withdraw) {
         if (company.getBalance().compareTo(withdraw.getValue()) < 0) {
-            throw new RuntimeException("Saldo insuficiente");
+            throw new RestException("Saldo da empresa insuficiente");
         }
     }
 
