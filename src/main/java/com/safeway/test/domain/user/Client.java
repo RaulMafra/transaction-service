@@ -21,9 +21,9 @@ public class Client {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "document", unique = true, nullable = false)
+    @Column(name = "document", unique = true, nullable = false, length = 15)
     private String document;
-    @Column(name = "email", unique = true, nullable = false, length = 11)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
