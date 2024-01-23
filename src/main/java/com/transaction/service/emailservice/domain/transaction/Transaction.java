@@ -1,8 +1,8 @@
-package com.transaction.service.domain.transaction;
+package com.transaction.service.emailservice.domain.transaction;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.transaction.service.domain.user.Client;
-import com.transaction.service.domain.user.Company;
+import com.transaction.service.emailservice.domain.user.Client;
+import com.transaction.service.emailservice.domain.user.Company;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

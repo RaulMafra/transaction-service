@@ -1,12 +1,12 @@
 package com.transaction.service.service;
 
 import com.transaction.service.callback.service.WebhookService;
-import com.transaction.service.domain.transaction.Transaction;
-import com.transaction.service.domain.transaction.TransactionType;
-import com.transaction.service.domain.user.Client;
-import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.ResponseCompanyDTO;
-import com.transaction.service.dtos.TransactionDTO;
+import com.transaction.service.dtos.response.ListTransactionsDTO;
+import com.transaction.service.emailservice.domain.transaction.Transaction;
+import com.transaction.service.emailservice.domain.transaction.TransactionType;
+import com.transaction.service.emailservice.domain.user.Client;
+import com.transaction.service.emailservice.domain.user.Company;
+import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.emailservice.provider.ses.SesEmailSending;
 import com.transaction.service.emailservice.service.EmailSendingService;
 import com.transaction.service.exception.exceptions.RestException;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -57,8 +58,8 @@ public class TransactionService {
         companyService.saveCompany(company);
         transactionRepository.save(deposit);
 
-        Transaction latestTransaction = this.allTransactions().get(0);
-        webhookService.sendInfoTransaction(new ResponseCompanyDTO(latestTransaction));
+        ListTransactionsDTO latestTransaction = this.allTransactions().get(0);
+        webhookService.sendInfoTransaction(latestTransaction);
     }
 
     public void createWithdraw(TransactionDTO transactionDTO) {
@@ -82,8 +83,8 @@ public class TransactionService {
         companyService.saveCompany(company);
         transactionRepository.save(withdraw);
 
-        Transaction latestTransaction = this.allTransactions().get(0);
-        webhookService.sendInfoTransaction(new ResponseCompanyDTO(latestTransaction));
+        ListTransactionsDTO latestTransaction = this.allTransactions().get(0);
+        webhookService.sendInfoTransaction(latestTransaction);
     }
 
     private void checkBalanceClient(Client client, Transaction deposit) {
@@ -98,9 +99,15 @@ public class TransactionService {
         }
     }
 
-    public List<Transaction> allTransactions(){
+    public List<ListTransactionsDTO> allTransactions(){
         List<Transaction> transactions = transactionRepository.findAll();
-        transactions.sort(Comparator.comparing(Transaction::getTimestamp).reversed());
-        return transactions;
+        List<ListTransactionsDTO> listTransactions = new ArrayList<>();
+        transactions.forEach(transaction -> {
+            listTransactions.add(new ListTransactionsDTO(transaction.getId(),
+                    transaction.getValue(), transaction.getTax(), transaction.getClient().getId(),
+                    transaction.getCompany().getId(), transaction.getTransactionType(), transaction.getTimestamp()));
+        });
+        listTransactions.sort(Comparator.comparing(ListTransactionsDTO::timestamp).reversed());
+        return listTransactions;
     }
 }
