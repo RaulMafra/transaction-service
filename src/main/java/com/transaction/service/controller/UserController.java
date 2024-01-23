@@ -1,9 +1,9 @@
 package com.transaction.service.controller;
 
-import com.transaction.service.domain.user.Client;
-import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.UserDTO;
-import com.transaction.service.dtos.ResponseDTO;
+import com.transaction.service.emailservice.domain.user.Client;
+import com.transaction.service.emailservice.domain.user.Company;
+import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.response.TransactionMessageDTO;
 import com.transaction.service.service.ClientService;
 import com.transaction.service.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/safeway/v1/users")
+@RequestMapping("/restservices/v1/users")
 public class UserController {
 
     @Autowired
@@ -24,15 +24,15 @@ public class UserController {
     private CompanyService companyService;
 
     @PostMapping("/create-client")
-    public ResponseEntity<ResponseDTO> createClient(@RequestBody UserDTO userDTO){
+    public ResponseEntity<TransactionMessageDTO> createClient(@RequestBody UserDTO userDTO){
         clientService.createClient(userDTO);
-        return new ResponseEntity<>(new ResponseDTO("Cliente criado!"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new TransactionMessageDTO("Cliente criado!"), HttpStatus.CREATED);
     }
 
     @PostMapping("/create-company")
-    public ResponseEntity<ResponseDTO> createCompany(@RequestBody UserDTO company){
+    public ResponseEntity<TransactionMessageDTO> createCompany(@RequestBody UserDTO company){
         companyService.createCompany(company);
-        return new ResponseEntity<>(new ResponseDTO("Empresa criada!"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new TransactionMessageDTO("Empresa criada!"), HttpStatus.CREATED);
     }
 
     @GetMapping("/list-companies")
