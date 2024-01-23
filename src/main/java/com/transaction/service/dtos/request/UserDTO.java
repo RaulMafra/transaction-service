@@ -1,4 +1,4 @@
-package com.transaction.service.dtos;
+package com.transaction.service.dtos.request;
 
 import java.math.BigDecimal;
 

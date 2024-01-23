@@ -1,6 +1,6 @@
-package com.transaction.service.domain.user;
+package com.transaction.service.emailservice.domain.user;
 
-import com.transaction.service.dtos.UserDTO;
+import com.transaction.service.dtos.request.UserDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

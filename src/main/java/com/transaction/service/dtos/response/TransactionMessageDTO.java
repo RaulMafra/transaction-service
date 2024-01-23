@@ -1,4 +1,4 @@
-package com.transaction.service.dtos;
+package com.transaction.service.dtos.response;
 
-public record ResponseDTO(String message) {
+public record TransactionMessageDTO(String message) {
 }

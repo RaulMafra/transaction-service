@@ -1,7 +1,6 @@
 package com.transaction.service.controller;
 
 import com.transaction.service.dtos.response.ListTransactionsDTO;
-import com.transaction.service.emailservice.domain.transaction.Transaction;
 import com.transaction.service.dtos.response.TransactionMessageDTO;
 import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.service.TransactionService;

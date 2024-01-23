@@ -1,6 +1,6 @@
 package com.transaction.service.dtos.response;
 
-import com.transaction.service.emailservice.domain.transaction.TransactionType;
+import com.transaction.service.domain.transaction.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
