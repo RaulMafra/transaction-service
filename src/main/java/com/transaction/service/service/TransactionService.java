@@ -2,10 +2,10 @@ package com.transaction.service.service;
 
 import com.transaction.service.callback.service.WebhookService;
 import com.transaction.service.dtos.response.ListTransactionsDTO;
-import com.transaction.service.emailservice.domain.transaction.Transaction;
-import com.transaction.service.emailservice.domain.transaction.TransactionType;
-import com.transaction.service.emailservice.domain.user.Client;
-import com.transaction.service.emailservice.domain.user.Company;
+import com.transaction.service.domain.transaction.Transaction;
+import com.transaction.service.domain.transaction.TransactionType;
+import com.transaction.service.domain.user.Client;
+import com.transaction.service.domain.user.Company;
 import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.emailservice.provider.ses.SesEmailSending;
 import com.transaction.service.emailservice.service.EmailSendingService;

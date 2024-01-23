@@ -1,7 +1,7 @@
 package com.transaction.service.controller;
 
-import com.transaction.service.emailservice.domain.user.Client;
-import com.transaction.service.emailservice.domain.user.Company;
+import com.transaction.service.domain.user.Client;
+import com.transaction.service.domain.user.Company;
 import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.dtos.response.TransactionMessageDTO;
 import com.transaction.service.service.ClientService;

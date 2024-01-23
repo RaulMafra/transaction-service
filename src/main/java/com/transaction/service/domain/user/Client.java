@@ -1,4 +1,4 @@
-package com.transaction.service.emailservice.domain.user;
+package com.transaction.service.domain.user;
 
 import com.transaction.service.dtos.request.UserDTO;
 import jakarta.persistence.*;

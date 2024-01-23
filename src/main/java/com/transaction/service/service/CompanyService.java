@@ -1,8 +1,8 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.TransactionDTO;
-import com.transaction.service.dtos.UserDTO;
+import com.transaction.service.dtos.request.TransactionDTO;
+import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.exception.exceptions.IllegalFormattingException;
 import com.transaction.service.exception.exceptions.RestException;
 import com.transaction.service.repository.CompanyRepository;

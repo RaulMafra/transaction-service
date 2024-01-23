@@ -1,4 +1,4 @@
-package com.transaction.service.emailservice.domain.transaction;
+package com.transaction.service.domain.transaction;
 
 public enum TransactionType {
     DEPOSIT,
