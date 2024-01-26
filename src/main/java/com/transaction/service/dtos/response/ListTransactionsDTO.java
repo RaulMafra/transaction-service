@@ -4,6 +4,7 @@ import com.transaction.service.domain.transaction.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public record ListTransactionsDTO(Long id, BigDecimal transactionValue, BigDecimal tax, Long idClient, Long idCompany, TransactionType transactionType, LocalDateTime timestamp) {
+public record ListTransactionsDTO(UUID id, BigDecimal transactionValue, BigDecimal tax, UUID idClient, UUID idCompany, TransactionType transactionType, LocalDateTime timestamp) {
 }
