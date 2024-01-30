@@ -1,11 +1,9 @@
 package com.transaction.service.controller;
 
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.domain.user.Company;
 import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.dtos.response.TransactionMessageDTO;
 import com.transaction.service.service.ClientService;
-import com.transaction.service.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,34 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restservices/v1")
-public class UserController {
+@RequestMapping("/restservice/v1/clients")
+public class ClientController {
+
+    private final ClientService clientService;
 
     @Autowired
-    private ClientService clientService;
+    private ClientController(ClientService clientService){
+        this.clientService = clientService;
+    }
 
-    @Autowired
-    private CompanyService companyService;
-
-    @PostMapping("/clients")
+    @PostMapping
     public ResponseEntity<TransactionMessageDTO> createClient(@RequestBody UserDTO userDTO){
         clientService.createClient(userDTO);
         return new ResponseEntity<>(new TransactionMessageDTO("Cliente criado!"), HttpStatus.CREATED);
     }
 
-    @PostMapping("/companies")
-    public ResponseEntity<TransactionMessageDTO> createCompany(@RequestBody UserDTO company){
-        companyService.createCompany(company);
-        return new ResponseEntity<>(new TransactionMessageDTO("Empresa criada!"), HttpStatus.CREATED);
-    }
 
-    @GetMapping("/listCompanies")
-    public ResponseEntity<List<Company>> listAllCompanies(){
-        List<Company> companies = companyService.listAllCompanies();
-        return new ResponseEntity<>(companies, HttpStatus.OK);
-    }
-
-    @GetMapping("/listClients")
+    @GetMapping
     public ResponseEntity<List<Client>> listAllClients(){
         List<Client> clients = clientService.listAllClients();
         return new ResponseEntity<>(clients, HttpStatus.OK);
