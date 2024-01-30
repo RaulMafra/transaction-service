@@ -25,6 +25,7 @@ public class TransactionController {
     }
 
     @PostMapping("/withdraw")
+
     public ResponseEntity<TransactionMessageDTO> withdraw(@RequestBody TransactionDTO transactionDTO){
         transactionService.createWithdraw(transactionDTO);
         return new ResponseEntity<>(new TransactionMessageDTO("Saque realizado com sucesso!"), HttpStatus.OK);
