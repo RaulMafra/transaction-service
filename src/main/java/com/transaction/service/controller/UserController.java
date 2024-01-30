@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restservices/v1/users")
+@RequestMapping("/restservices/v1")
 public class UserController {
 
     @Autowired
@@ -23,25 +23,25 @@ public class UserController {
     @Autowired
     private CompanyService companyService;
 
-    @PostMapping("/create-client")
+    @PostMapping("/clients")
     public ResponseEntity<TransactionMessageDTO> createClient(@RequestBody UserDTO userDTO){
         clientService.createClient(userDTO);
         return new ResponseEntity<>(new TransactionMessageDTO("Cliente criado!"), HttpStatus.CREATED);
     }
 
-    @PostMapping("/create-company")
+    @PostMapping("/companies")
     public ResponseEntity<TransactionMessageDTO> createCompany(@RequestBody UserDTO company){
         companyService.createCompany(company);
         return new ResponseEntity<>(new TransactionMessageDTO("Empresa criada!"), HttpStatus.CREATED);
     }
 
-    @GetMapping("/list-companies")
+    @GetMapping("/listCompanies")
     public ResponseEntity<List<Company>> listAllCompanies(){
         List<Company> companies = companyService.listAllCompanies();
         return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 
-    @GetMapping("/list-clients")
+    @GetMapping("/listClients")
     public ResponseEntity<List<Client>> listAllClients(){
         List<Client> clients = clientService.listAllClients();
         return new ResponseEntity<>(clients, HttpStatus.OK);
