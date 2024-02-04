@@ -28,7 +28,7 @@ public class Transaction {
     @Column(name = "transactionValue")
     private BigDecimal value;
     @Column(name = "tax")
-    private BigDecimal tax;
+    private double tax;
     @ManyToOne
     @JoinColumns(value = @JoinColumn(name = "id_client"), foreignKey = @ForeignKey(name = "id_client"))
     private Client client;
@@ -41,7 +41,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    public Transaction(BigDecimal value, BigDecimal tax, Client client, Company company, TransactionType transactionType){
+    public Transaction(BigDecimal value, double tax, Client client, Company company, TransactionType transactionType){
         this.value = value;
         this.tax = tax;
         this.client = client;
