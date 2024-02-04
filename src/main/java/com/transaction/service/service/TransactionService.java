@@ -1,7 +1,6 @@
 package com.transaction.service.service;
 
 import com.transaction.service.callback.service.WebhookService;
-import com.transaction.service.dtos.response.ListTransactionsDTO;
 import com.transaction.service.domain.transaction.Transaction;
 import com.transaction.service.domain.transaction.TransactionType;
 import com.transaction.service.domain.user.Client;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -48,7 +46,7 @@ public class TransactionService {
 
         this.checkBalanceClient(client, deposit);
 
-        BigDecimal tax = deposit.getValue().multiply(transactionDTO.tax());
+        BigDecimal tax = deposit.getValue().multiply(BigDecimal.valueOf(transactionDTO.tax()));
         company.setBalance(company.getBalance().add(deposit.getValue().subtract(tax)));
         client.setBalance(client.getBalance().subtract(deposit.getValue()));
 
@@ -58,8 +56,7 @@ public class TransactionService {
         companyService.saveCompany(company);
         transactionRepository.save(deposit);
 
-        ListTransactionsDTO latestTransaction = this.allTransactions().get(0);
-        webhookService.sendInfoTransaction(latestTransaction);
+        webhookService.sendInfoTransaction(this.allTransactions().get(0));
     }
 
     public void createWithdraw(TransactionDTO transactionDTO) {
@@ -73,7 +70,7 @@ public class TransactionService {
 
         this.checkBalanceCompany(company, withdraw);
 
-        BigDecimal tax = withdraw.getValue().multiply(transactionDTO.tax());
+        BigDecimal tax = withdraw.getValue().multiply(BigDecimal.valueOf(transactionDTO.tax()));
         company.setBalance(company.getBalance().subtract(withdraw.getValue().add(tax)));
         client.setBalance(client.getBalance().add(withdraw.getValue()));
 
@@ -83,8 +80,7 @@ public class TransactionService {
         companyService.saveCompany(company);
         transactionRepository.save(withdraw);
 
-        ListTransactionsDTO latestTransaction = this.allTransactions().get(0);
-        webhookService.sendInfoTransaction(latestTransaction);
+        webhookService.sendInfoTransaction(this.allTransactions().get(0));
     }
 
     private void checkBalanceClient(Client client, Transaction deposit) {
@@ -99,15 +95,9 @@ public class TransactionService {
         }
     }
 
-    public List<ListTransactionsDTO> allTransactions(){
+    public List<Transaction> allTransactions(){
         List<Transaction> transactions = transactionRepository.findAll();
-        List<ListTransactionsDTO> listTransactions = new ArrayList<>();
-        transactions.forEach(transaction -> {
-            listTransactions.add(new ListTransactionsDTO(transaction.getId(),
-                    transaction.getValue(), transaction.getTax(), transaction.getClient().getId(),
-                    transaction.getCompany().getId(), transaction.getTransactionType(), transaction.getTimestamp()));
-        });
-        listTransactions.sort(Comparator.comparing(ListTransactionsDTO::timestamp).reversed());
-        return listTransactions;
+        transactions.sort(Comparator.comparing(Transaction::getTimestamp).reversed());
+        return transactions;
     }
 }

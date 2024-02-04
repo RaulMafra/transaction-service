@@ -1,6 +1,6 @@
 package com.transaction.service.callback.service;
 
-import com.transaction.service.dtos.response.ListTransactionsDTO;
+import com.transaction.service.domain.transaction.Transaction;
 import com.transaction.service.exception.exceptions.WebhookException;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class WebhookService {
     @Value(value = "${webhook.absolute.url}")
     private String url;
 
-    public void sendInfoTransaction(ListTransactionsDTO callbackCompanyDTO) {
-        HttpEntity<ListTransactionsDTO> request = new HttpEntity<>(callbackCompanyDTO);
+    public void sendInfoTransaction(Transaction transaction) {
+        HttpEntity<Transaction> request = new HttpEntity<>(transaction);
         try {
             URL uri = new URL(url);
             uri.openConnection().connect();

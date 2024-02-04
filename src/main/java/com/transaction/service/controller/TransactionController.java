@@ -1,8 +1,8 @@
 package com.transaction.service.controller;
 
-import com.transaction.service.dtos.response.ListTransactionsDTO;
-import com.transaction.service.dtos.response.TransactionMessageDTO;
+import com.transaction.service.domain.transaction.Transaction;
 import com.transaction.service.dtos.request.TransactionDTO;
+import com.transaction.service.dtos.response.TransactionMessageDTO;
 import com.transaction.service.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,8 +32,8 @@ public class TransactionController {
     }
 
     @GetMapping("/listAll")
-    public ResponseEntity<List<ListTransactionsDTO>> listTransactions(){
-        List<ListTransactionsDTO> transactions = transactionService.allTransactions();
+    public ResponseEntity<List<Transaction>> listTransactions(){
+        List<Transaction> transactions = transactionService.allTransactions();
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }
