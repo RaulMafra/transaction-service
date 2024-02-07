@@ -29,11 +29,11 @@ public class Transaction {
     private BigDecimal value;
     @Column(name = "tax")
     private double tax;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumns(value = @JoinColumn(name = "id_client"), foreignKey = @ForeignKey(name = "id_client"))
     private Client client;
-    @ManyToOne
-    @JoinColumn(name = "id_company")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumns(value = @JoinColumn(name = "id_company"), foreignKey = @ForeignKey(name = "id_company"))
     private Company company;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "timestamp")
@@ -41,13 +41,5 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    public Transaction(BigDecimal value, double tax, Client client, Company company, TransactionType transactionType){
-        this.value = value;
-        this.tax = tax;
-        this.client = client;
-        this.company = company;
-        this.timestamp = LocalDateTime.now();
-        this.transactionType = transactionType;
-    }
 
 }
