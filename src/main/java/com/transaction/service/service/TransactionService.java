@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -41,8 +43,8 @@ public class TransactionService {
         }
         Company company = companyService.getCompany(transactionDTO);
         Client client = clientService.getClient(transactionDTO);
-        Transaction deposit = new Transaction(transactionDTO.transactionValue(),
-                transactionDTO.tax(), client, company, transactionDTO.transactionType());
+        Transaction deposit = new Transaction(UUID.randomUUID(), transactionDTO.transactionValue(),
+                transactionDTO.tax(), client, company, LocalDateTime.now(), transactionDTO.transactionType());
 
         this.checkBalanceClient(client, deposit);
 
@@ -56,7 +58,7 @@ public class TransactionService {
         companyService.saveCompany(company);
         transactionRepository.save(deposit);
 
-        webhookService.sendInfoTransaction(this.allTransactions().get(0));
+        webhookService.sendInfoTransaction(deposit);
     }
 
     public void createWithdraw(TransactionDTO transactionDTO) {
@@ -65,8 +67,8 @@ public class TransactionService {
         }
         Company company = companyService.getCompany(transactionDTO);
         Client client = clientService.getClient(transactionDTO);
-        Transaction withdraw = new Transaction(transactionDTO.transactionValue(),
-                transactionDTO.tax(), client, company, transactionDTO.transactionType());
+        Transaction withdraw = new Transaction(UUID.randomUUID(), transactionDTO.transactionValue(),
+                transactionDTO.tax(), client, company, LocalDateTime.now(), transactionDTO.transactionType());
 
         this.checkBalanceCompany(company, withdraw);
 
@@ -80,7 +82,7 @@ public class TransactionService {
         companyService.saveCompany(company);
         transactionRepository.save(withdraw);
 
-        webhookService.sendInfoTransaction(this.allTransactions().get(0));
+        webhookService.sendInfoTransaction(withdraw);
     }
 
     private void checkBalanceClient(Client client, Transaction deposit) {
