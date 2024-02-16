@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalFormattingException.class)
-    private ResponseEntity<ResponseError> handleApiRestExceptions(IllegalFormattingException e, WebRequest request, HttpServletRequest servletRequest){
+    private ResponseEntity<ResponseError> handleFormattingExceptions(IllegalFormattingException e, WebRequest request, HttpServletRequest servletRequest){
         ResponseError responseError = new ResponseError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST, e.getMessage(), servletRequest.getRequestURI());
         return new ResponseEntity<>(responseError, headers(), HttpStatus.BAD_REQUEST);
     }
