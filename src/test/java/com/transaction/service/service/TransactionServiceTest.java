@@ -10,6 +10,7 @@ import com.transaction.service.emailservice.provider.ses.SesEmailSending;
 import com.transaction.service.emailservice.service.EmailSendingService;
 import com.transaction.service.exception.exceptions.RestException;
 import com.transaction.service.repository.TransactionRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,19 +48,26 @@ class TransactionServiceTest {
     @InjectMocks
     private TransactionService transactionService;
 
+    Client client;
+    Company company;
+
+    @BeforeEach
+    public void setup(){
+         client = new Client(UUID.randomUUID(), "example", "11111111100", "example@teste.com", new BigDecimal(0));
+         company = new Company(UUID.randomUUID(), "example2", "34345678000123", "example2@teste.com", new BigDecimal(0));
+    }
+
+
 
     @Test
     @DisplayName("Create a deposit with successfully when is everything ok")
     void should_create_a_transaction_of_the_type_deposit_with_successfully() {
-
-        UUID clientUUID = UUID.randomUUID();
-        UUID companyUUID = UUID.randomUUID();
-
-        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(50), 0.02, clientUUID, companyUUID,
+        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(50), 0.02, client.getId(), company.getId(),
                 TransactionType.valueOf("DEPOSIT"));
 
-        Client client = new Client(clientUUID, "example", "11111111100", "example@teste.com", new BigDecimal(80));
-        Company company = new Company(companyUUID, "example2", "34345678000123", "example2@teste.com", new BigDecimal(100));
+        this.client.setBalance(new BigDecimal(80));
+        this.company.setBalance(new BigDecimal(100));
+
 
         when(this.clientService.getClient(transactionDTO)).thenReturn(client);
         when(this.companyService.getCompany(transactionDTO)).thenReturn(company);
@@ -83,14 +91,11 @@ class TransactionServiceTest {
     @DisplayName("Create a withdraw with successfully when is everything ok")
     void should_create_a_transaction_of_the_type_withdraw_with_successfully() {
 
-        UUID clientUUID = UUID.randomUUID();
-        UUID companyUUID = UUID.randomUUID();
-
-        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(100), 0.04, clientUUID, companyUUID,
+        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(100), 0.04, client.getId(), company.getId(),
                 TransactionType.valueOf("WITHDRAW"));
 
-        Client client = new Client(clientUUID, "example", "11111111100", "example@teste.com", new BigDecimal(50));
-        Company company = new Company(companyUUID, "example2", "34345678000123", "example2@teste.com", new BigDecimal(120));
+        this.client.setBalance(new BigDecimal(50));
+        this.company.setBalance(new BigDecimal(120));
 
         when(this.clientService.getClient(transactionDTO)).thenReturn(client);
         when(this.companyService.getCompany(transactionDTO)).thenReturn(company);
@@ -111,15 +116,11 @@ class TransactionServiceTest {
     @Test
     @DisplayName("Failed while the creation of the deposit when isn't everything ok")
     void should_failed_in_the_creation_of_the_transaction_of_the_type_deposit() {
-
-        UUID clientUUID = UUID.randomUUID();
-        UUID companyUUID = UUID.randomUUID();
-
-        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(50), 0.02, clientUUID, companyUUID,
+        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(50), 0.02, client.getId(), company.getId(),
                 TransactionType.valueOf("DEPOSIT"));
 
-        Client client = new Client(clientUUID, "example", "11111111100", "example@teste.com", new BigDecimal(20));
-        Company company = new Company(companyUUID, "example2", "34345678000123", "example2@teste.com", new BigDecimal(100));
+        this.client.setBalance(new BigDecimal(20));
+        this.company.setBalance(new BigDecimal(100));
 
         when(this.clientService.getClient(transactionDTO)).thenReturn(client);
         when(this.companyService.getCompany(transactionDTO)).thenReturn(company);
@@ -134,7 +135,6 @@ class TransactionServiceTest {
         verify(this.companyService, times(0)).saveCompany(company);
         verify(this.transactionRepository, times(0)).save(any());
 
-
         verify(this.emailSendingService, times(0)).sendEmail(SesEmailSending.EMAIL, "Status depósito", "Depósito realizado com sucesso!");
         verify(this.webhookService, times(0)).sendInfoTransaction(any());
     }
@@ -142,15 +142,11 @@ class TransactionServiceTest {
     @Test
     @DisplayName("Failed while the creation of the withdraw when isn't everything ok")
     void should_failed_in_the_creation_of_the_transaction_of_the_type_withdraw() {
-
-        UUID clientUUID = UUID.randomUUID();
-        UUID companyUUID = UUID.randomUUID();
-
-        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(100), 0.04, clientUUID, companyUUID,
+        TransactionDTO transactionDTO = new TransactionDTO(new BigDecimal(100), 0.04, client.getId(), company.getId(),
                 TransactionType.valueOf("WITHDRAW"));
 
-        Client client = new Client(clientUUID, "example", "11111111100", "example@teste.com", new BigDecimal(50));
-        Company company = new Company(companyUUID, "example2", "34345678000123", "example2@teste.com", new BigDecimal(100));
+        this.client.setBalance(new BigDecimal(50));
+        this.company.setBalance(new BigDecimal(100));
 
         assertThrows(RestException.class, () -> this.transactionService.createDeposit(transactionDTO),
                 "Saldo da empresa insuficiente");
