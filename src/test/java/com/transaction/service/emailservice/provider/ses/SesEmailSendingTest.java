@@ -1,41 +1,33 @@
 package com.transaction.service.emailservice.provider.ses;
 
-import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.amazonaws.services.simpleemail.model.*;
-import com.transaction.service.emailservice.adapters.EmailSendingGatewayTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.*;
 
-public class SesTestEmailSendingTest implements EmailSendingGatewayTest {
+@ExtendWith(MockitoExtension.class)
+class SesEmailSendingTest {
 
     @Mock
     private AmazonSimpleEmailService amazonSimpleEmailService;
 
-    public static final String EMAIL = System.getenv("SENDER_EMAIL");
+    @InjectMocks
+    private SesEmailSending sesEmailSending;
 
 
-    @Override
-    public void sendEmail(String to, String subject, String body) {
-        assertAll(
-                () -> assertNotNull(to),
-                () -> assertNotNull(subject),
-                () -> assertNotNull(body),
-                () -> assertNotNull(EMAIL));
-        SendEmailRequest request = new SendEmailRequest()
-                .withSource(EMAIL)
-                .withDestination(new Destination().withToAddresses(to))
-                .withMessage(new Message
-                        (new Content(subject), new Body(new Content(body))));
-
-        try{
-            Mockito.verify(this.amazonSimpleEmailService, Mockito.times(1)).sendEmail(request);
-        } catch(AmazonSimpleEmailServiceException e){
-            throw new AmazonClientException(e.getMessage());
-        }
+    @Test
+    @DisplayName("Check if the method override send of the EmailSendingGateway is invoked with successfully")
+    void should_invock_the_method_sendEmail_override_of_EmailSendingGateway_with_successfully() {
+        assertDoesNotThrow(() -> this.sesEmailSending.sendEmail("examble@test.com", "test", "test"));
+        verify(this.amazonSimpleEmailService, times(1)).sendEmail(any());
 
     }
+
 
 }
