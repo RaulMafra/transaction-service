@@ -1,21 +1,17 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.dtos.request.UserDTO;
-import com.transaction.service.exception.exceptions.IllegalFormattingException;
-import com.transaction.service.exception.exceptions.RestException;
+import com.transaction.service.exception.exceptions.IllegalFieldException;
 import com.transaction.service.repository.ClientRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -52,7 +48,7 @@ class ClientServiceTest {
         UserDTO client = new UserDTO("Jose", document, "jose@gmail.com", new BigDecimal(80));
 
         Client newClient = new Client(client);
-        assertThrows(IllegalFormattingException.class, () -> this.docFormatting(newClient));
+        assertThrows(IllegalFieldException.class, () -> this.docFormatting(newClient));
         this.saveClient(newClient);
 
         assertThat(clientRepository.findClientByDocument("999.999.999-9900").isEmpty()).isTrue();
@@ -62,7 +58,7 @@ class ClientServiceTest {
     @DisplayName("Verify the amount of the characters of document and format this document")
     private void docFormatting(Client client) {
         if (client.getDocument().length() != 11) {
-            throw new IllegalFormattingException("A quantidade de caracteres do documento excede o permitido");
+            throw new IllegalFieldException("A quantidade de caracteres do documento excede o permitido");
         }
         String docFormatted = String.format("%s.%s.%s-%s",
                 client.getDocument().subSequence(0, 3),client.getDocument().subSequence(3,6),
