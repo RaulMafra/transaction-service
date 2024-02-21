@@ -5,5 +5,5 @@ import com.transaction.service.domain.transaction.TransactionType;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record TransactionDTO(BigDecimal transactionValue, double tax, UUID idClient, UUID idCompany, TransactionType transactionType) {
+public record TransactionDTO(BigDecimal transactionValue, Double tax, UUID idClient, UUID idCompany, TransactionType transactionType) {
 }

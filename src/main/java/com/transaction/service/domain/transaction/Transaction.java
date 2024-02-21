@@ -28,7 +28,7 @@ public class Transaction {
     @Column(name = "transactionValue")
     private BigDecimal value;
     @Column(name = "tax")
-    private double tax;
+    private Double tax;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumns(value = @JoinColumn(name = "id_client"), foreignKey = @ForeignKey(name = "id_client"))
     private Client client;
