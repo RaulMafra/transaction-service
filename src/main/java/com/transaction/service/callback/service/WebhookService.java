@@ -32,7 +32,7 @@ public class WebhookService {
             uri.openConnection().connect();
             restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (RestClientException | UnknownHostException e) {
-            throw new WebhookException("Servico de envio de confirmacao da transacao indisponivel", e.getCause());
+            throw new WebhookException("Callback service unavailable", e.getCause());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
