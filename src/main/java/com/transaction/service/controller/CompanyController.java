@@ -25,7 +25,7 @@ public class CompanyController {
     @PostMapping
     public ResponseEntity<TransactionMessageDTO> createCompany(@RequestBody UserDTO company){
         companyService.createCompany(company);
-        return new ResponseEntity<>(new TransactionMessageDTO("Empresa criada!"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new TransactionMessageDTO("Created company with successfully"), HttpStatus.CREATED);
     }
 
     @GetMapping

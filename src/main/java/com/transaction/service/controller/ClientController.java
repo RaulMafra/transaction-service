@@ -25,7 +25,7 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<TransactionMessageDTO> createClient(@RequestBody UserDTO userDTO){
         clientService.createClient(userDTO);
-        return new ResponseEntity<>(new TransactionMessageDTO("Cliente criado!"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new TransactionMessageDTO("Created client with successfully"), HttpStatus.CREATED);
     }
 
 

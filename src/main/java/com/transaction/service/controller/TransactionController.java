@@ -21,14 +21,14 @@ public class TransactionController {
     @PostMapping("/deposit")
     public ResponseEntity<TransactionMessageDTO> deposit(@RequestBody TransactionDTO transactionDTO){
         transactionService.createDeposit(transactionDTO);
-        return new ResponseEntity<>(new TransactionMessageDTO("Deposito realizado com sucesso!"), HttpStatus.OK);
+        return new ResponseEntity<>(new TransactionMessageDTO("Deposit done with successfully"), HttpStatus.OK);
     }
 
     @PostMapping("/withdraw")
 
     public ResponseEntity<TransactionMessageDTO> withdraw(@RequestBody TransactionDTO transactionDTO){
         transactionService.createWithdraw(transactionDTO);
-        return new ResponseEntity<>(new TransactionMessageDTO("Saque realizado com sucesso!"), HttpStatus.OK);
+        return new ResponseEntity<>(new TransactionMessageDTO("Withdraw done with successfully"), HttpStatus.OK);
     }
 
     @GetMapping("/listAll")
