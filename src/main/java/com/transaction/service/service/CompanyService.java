@@ -29,19 +29,18 @@ public class CompanyService {
             throw new IllegalFieldException("There's some value absent in the body");
         }
         Company newCompany = new Company(company);
-        this.docFormatting(newCompany);
+        newCompany.setDocument(this.docFormatting(newCompany.getDocument()));
         this.saveCompany(newCompany);
     }
 
-    private void docFormatting(Company company){
-        if(company.getDocument().length() != 14){
+    private String docFormatting(String document){
+        if(document.length() != 14){
             throw new IllegalFieldException("Quantity of characters of the document insufficient or exceeds the allowed");
         }
-        String docFormatted = String.format("%s.%s.%s/%s-%s",
-                company.getDocument().subSequence(0,2), company.getDocument().subSequence(2,5),
-                company.getDocument().subSequence(5,8), company.getDocument().subSequence(8,12),
-                company.getDocument().subSequence(12,14));
-        company.setDocument(docFormatted);
+        return String.format("%s.%s.%s/%s-%s",
+                document.subSequence(0,2), document.subSequence(2,5),
+                document.subSequence(5,8), document.subSequence(8,12),
+                document.subSequence(12,14));
     }
 
     public Company getCompany(TransactionDTO transactionDTO){

@@ -30,18 +30,17 @@ public class ClientService {
             throw new IllegalFieldException("There's some value absent in the body");
         }
         Client newClient = new Client(client);
-        this.docFormatting(newClient);
+        newClient.setDocument(this.docFormatting(newClient.getDocument()));
         this.saveClient(newClient);
     }
 
-    private void docFormatting(Client client) {
-        if (client.getDocument().length() != 11) {
+    private String docFormatting(String document) {
+        if (document.length() != 11) {
             throw new IllegalFieldException("Quantity of characters of the document insufficient or exceeds the allowed");
         }
-        String docFormatted = String.format("%s.%s.%s-%s",
-                client.getDocument().subSequence(0, 3), client.getDocument().subSequence(3, 6),
-                client.getDocument().subSequence(6, 9), client.getDocument().subSequence(9, 11));
-        client.setDocument(docFormatted);
+        return String.format("%s.%s.%s-%s",
+                document.subSequence(0, 3), document.subSequence(3, 6),
+                document.subSequence(6, 9), document.subSequence(9, 11));
     }
 
     public Client getClient(TransactionDTO transactionDTO) {
