@@ -1,6 +1,5 @@
 package com.transaction.service.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transaction.service.domain.transaction.Transaction;
 import com.transaction.service.domain.transaction.TransactionType;
@@ -32,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -45,8 +45,6 @@ class TransactionControllerTest {
     private TransactionController transactionController;
 
     MockMvc mockMvc;
-
-    String serializeObject;
 
     URI uri;
 
@@ -63,18 +61,17 @@ class TransactionControllerTest {
     @SneakyThrows
     @Test
     @DisplayName("Created a deposit with successfully and return OK")
-    void should_created_a_deposit_with_successfully_and_return_status_code_200() throws JsonProcessingException {
+    void should_created_a_deposit_with_successfully_and_return_status_code_200() {
         TransactionDTO deposit = new TransactionDTO(new BigDecimal(20), 0.03, UUID.randomUUID(), UUID.randomUUID(), TransactionType.DEPOSIT);
 
         doNothing().when(this.transactionService).createDeposit(deposit);
 
-        serializeObject = new ObjectMapper().writeValueAsString(deposit);
-
         mockMvc.perform(post(uri + "/deposit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8)
-                .content(serializeObject))
-                .andExpect(status().isOk())
+                .content(new ObjectMapper().writeValueAsString(deposit)))
+                .andExpectAll(status().isOk(),
+                        content().string("{\"message\":\"Deposit done with successfully\"}"))
                 .andReturn();
 
         verify(this.transactionService, times(1)).createDeposit(deposit);
@@ -84,28 +81,28 @@ class TransactionControllerTest {
     @SneakyThrows
     @Test
     @DisplayName("Created a withdraw with successfully and return OK")
-    void should_created_a_withdraw_with_successfully_and_return_status_code_200() throws JsonProcessingException {
-        TransactionDTO withdraw = new TransactionDTO(new BigDecimal(20), 0.03, UUID.randomUUID(), UUID.randomUUID(), TransactionType.DEPOSIT);
+    void should_created_a_withdraw_with_successfully_and_return_status_code_200() {
+        TransactionDTO withdraw = new TransactionDTO(new BigDecimal(20), 0.03, UUID.randomUUID(), UUID.randomUUID(), TransactionType.WITHDRAW);
 
         doNothing().when(this.transactionService).createWithdraw(withdraw);
-
-        serializeObject = new ObjectMapper().writeValueAsString(withdraw);
 
         mockMvc.perform(post(uri + "/withdraw")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8)
-                .content(serializeObject))
-                .andExpect(status().isOk())
+                .content(new ObjectMapper().writeValueAsString(withdraw)))
+                .andExpectAll(status().isOk(),
+                        content().string("{\"message\":\"Withdraw done with successfully\"}"))
                 .andReturn();
 
         verify(this.transactionService, times(1)).createWithdraw(withdraw);
         verifyNoMoreInteractions(this.transactionService);
     }
 
+
     @SneakyThrows
     @Test
     @DisplayName("Return all transactions done and status code OK")
-    void should_search_all_transactions_done_and_return_status_code_200() throws JsonProcessingException {
+    void should_search_all_transactions_done_and_return_status_code_200() {
         Client client = new Client(UUID.randomUUID(), "Client", "123456789100", "client@test.com", new BigDecimal(50));
         Company company = new Company(UUID.randomUUID(), "Company", "34345678000121", "company@test.com", new BigDecimal(60));
 
@@ -113,20 +110,18 @@ class TransactionControllerTest {
         transactions.add(new Transaction(UUID.randomUUID(), new BigDecimal(10), 0.03, client, company, LocalDateTime.now(), TransactionType.WITHDRAW));
         transactions.add(new Transaction(UUID.randomUUID(), new BigDecimal(20), 0.02, client, company, LocalDateTime.now(), TransactionType.DEPOSIT));
 
-
-        serializeObject = new ObjectMapper().findAndRegisterModules()
-                .writeValueAsString(transactions);
-
         when(this.transactionService.allTransactions()).thenReturn(transactions);
 
         mockMvc.perform(get(uri + "/listAll")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8)
-                .content(serializeObject))
-                .andExpect(status().isOk())
+                .content(new ObjectMapper().findAndRegisterModules().writeValueAsString(transactions)))
+                .andExpectAll(status().isOk(),
+                    content().string(new ObjectMapper().findAndRegisterModules().writeValueAsString(transactions)))
                 .andReturn();
 
         verify(this.transactionService, times(1)).allTransactions();
         verifyNoMoreInteractions(this.transactionService);
     }
+
 }
