@@ -4,10 +4,8 @@ import com.transaction.service.domain.user.Client;
 import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
-import com.transaction.service.exception.exceptions.RestException;
 import com.transaction.service.exception.exceptions.UserNotFound;
 import com.transaction.service.repository.ClientRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
