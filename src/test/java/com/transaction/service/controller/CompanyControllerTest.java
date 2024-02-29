@@ -80,8 +80,7 @@ class CompanyControllerTest {
         Company company = new Company(UUID.randomUUID(), "Example", "34345678000121", "example@test.com", new BigDecimal(0));
         List<Company> companies = new ArrayList<>(List.of(company));
 
-
-        when(this.companyService.listAllCompanies()).thenReturn(Collections.singletonList(company));
+        when(this.companyService.listAllCompanies()).thenReturn(companies);
 
         mockMvc.perform(get(uri)
                         .contentType(MediaType.APPLICATION_JSON)

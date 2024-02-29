@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +80,7 @@ class ClientControllerTest {
         Client client = new Client(UUID.randomUUID(), "example", "11111111100", "example@teste.com", new BigDecimal(0));
         List<Client> clients = new ArrayList<>(List.of(client));
 
-        when(this.clientService.listAllClients()).thenReturn(Collections.singletonList(client));
+        when(this.clientService.listAllClients()).thenReturn(clients);
 
         mockMvc.perform(get(uri)
                         .contentType(MediaType.APPLICATION_JSON)
