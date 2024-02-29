@@ -7,11 +7,14 @@ import com.transaction.service.repository.ClientRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.util.IllegalFormatException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -27,14 +30,14 @@ class ClientServiceTest {
     @Autowired
     private EntityManager entityManager;
 
+
     @Test
     @DisplayName("Obtain a client created with successfully")
     void should_create_and_obtain_a_client_with_successfully() {
-        String document = "11111111100";
-        UserDTO client = new UserDTO("Maria", document, "maria@gmail.com", new BigDecimal(80));
+        UserDTO client = new UserDTO("Test", "11111111100", "test@example.com", new BigDecimal(80));
 
         Client newClient = new Client(client);
-        assertDoesNotThrow(() -> this.docFormatting(newClient));
+        assertDoesNotThrow(() -> newClient.setDocument(this.docFormatting(newClient.getDocument())));
         this.saveClient(newClient);
 
         assertThat(this.clientRepository.findClientByDocument("111.111.111-00").isPresent()).isTrue();
@@ -42,32 +45,51 @@ class ClientServiceTest {
     }
 
     @Test
-    @DisplayName("Failed in the creation of the client")
-    void should_failed_to_the_create_and_obtain_a_client() {
-        String document = "9999999999900";
-        UserDTO client = new UserDTO("Jose", document, "jose@gmail.com", new BigDecimal(80));
+    @DisplayName("Failed in the creation of the client when the size document is different than 11 digits")
+    void should_failed_to_the_create_a_client_when_size_document_different_of_the_11() {
+        UserDTO client = new UserDTO("Test", "9999999999900", "test@example.com", new BigDecimal(80));
 
         Client newClient = new Client(client);
-        assertThrows(IllegalFieldException.class, () -> this.docFormatting(newClient));
+        assertThrows(IllegalFieldException.class, () -> newClient.setDocument(this.docFormatting(newClient.getDocument())),
+                "Quantity of characters of the document insufficient or exceeds the allowed");
         this.saveClient(newClient);
 
         assertThat(clientRepository.findClientByDocument("999.999.999-9900").isEmpty()).isTrue();
 
     }
+    
+
+    @Test
+    @DisplayName("Search with successfully all clients created")
+    void should_search_all_clients_created() {
+        UserDTO client = new UserDTO("Test", "11111111100", "test@example.com", new BigDecimal(80));
+        UserDTO client2 = new UserDTO("Test2", "22111111100", "test2@example.com", new BigDecimal(50));
+
+        Client newClient = new Client(client);
+        Client newClient2 = new Client(client2);
+
+        assertDoesNotThrow(() -> newClient.setDocument(this.docFormatting(newClient.getDocument())));
+        assertDoesNotThrow(() -> newClient2.setDocument(this.docFormatting(newClient2.getDocument())));
+
+        this.saveClient(newClient);
+        this.saveClient(newClient2);
+
+        assertThat(this.clientRepository.findAll()).isNotEmpty();
+
+    }
 
     @DisplayName("Verify the amount of the characters of document and format this document")
-    private void docFormatting(Client client) {
-        if (client.getDocument().length() != 11) {
-            throw new IllegalFieldException("A quantidade de caracteres do documento excede o permitido");
+    String docFormatting(String document) {
+        if (document.length() != 11) {
+            throw new IllegalFieldException("Quantity of characters of the document insufficient or exceeds the allowed");
         }
-        String docFormatted = String.format("%s.%s.%s-%s",
-                client.getDocument().subSequence(0, 3),client.getDocument().subSequence(3,6),
-                client.getDocument().subSequence(6,9),client.getDocument().subSequence(9,11));
-        client.setDocument(docFormatted);
+        return String.format("%s.%s.%s-%s",
+                document.subSequence(0, 3), document.subSequence(3, 6),
+                document.subSequence(6, 9), document.subSequence(9, 11));
     }
 
     @DisplayName("Save a client with the correct data")
-    public void saveClient(Client client) {
+    void saveClient(Client client) {
         this.entityManager.persist(client);
     }
 
