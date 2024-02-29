@@ -1,6 +1,5 @@
 package com.transaction.service.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transaction.service.domain.user.Client;
 import com.transaction.service.dtos.request.UserDTO;
@@ -29,6 +28,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,8 +41,6 @@ class ClientControllerTest {
 
     @InjectMocks
     private ClientController clientController;
-
-    private String serializeObject;
 
     private URI uri;
 
@@ -58,18 +56,19 @@ class ClientControllerTest {
     @SneakyThrows
     @Test
     @DisplayName("Create a client with successfully and return status code 201")
-    void should_create_a_client_and_return_status_code_201(){
+    void should_create_a_client_and_return_status_code_201() {
         UserDTO client = new UserDTO("Example", "12356678123",
                 "example@email.com", new BigDecimal(100));
-        serializeObject = new ObjectMapper().writeValueAsString(client);
 
         doNothing().when(clientService).createClient(client);
 
         mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
-                .content(serializeObject))
-                .andExpect(status().isCreated()).andReturn();
+                        .content(new ObjectMapper().writeValueAsString(client)))
+                .andExpectAll(status().isCreated(),
+                        content().string("{\"message\":\"Created client with successfully\"}"))
+                .andReturn();
 
         verify(clientService, times(1)).createClient(client);
         verifyNoMoreInteractions(clientService);
@@ -78,19 +77,19 @@ class ClientControllerTest {
     @SneakyThrows
     @Test
     @DisplayName("Search a list of the clients e return status code 200")
-    void should_return_a_list_of_the_clients_and_status_code_200() throws JsonProcessingException {
-        Client client1 = new Client(UUID.randomUUID(), "example", "11111111100", "example@teste.com", new BigDecimal(0));
-        List<Client> clients = new ArrayList<>(List.of(client1));
+    void should_return_a_list_of_the_clients_and_status_code_200() {
+        Client client = new Client(UUID.randomUUID(), "example", "11111111100", "example@teste.com", new BigDecimal(0));
+        List<Client> clients = new ArrayList<>(List.of(client));
 
-        serializeObject = new ObjectMapper().writeValueAsString(clients);
-
-        when(this.clientService.listAllClients()).thenReturn(Collections.singletonList(client1));
+        when(this.clientService.listAllClients()).thenReturn(Collections.singletonList(client));
 
         mockMvc.perform(get(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding(StandardCharsets.UTF_8)
-                        .content(serializeObject))
-                .andExpect(status().isOk());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .content(new ObjectMapper().writeValueAsString(clients)))
+                .andExpectAll(status().isOk(),
+                        content().string(new ObjectMapper().writeValueAsString(clients)))
+                .andReturn();
 
         verify(this.clientService, times(1)).listAllClients();
         verifyNoMoreInteractions(clientService);
