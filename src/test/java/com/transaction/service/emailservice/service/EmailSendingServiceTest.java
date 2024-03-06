@@ -8,8 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmailSendingServiceTest {
@@ -21,10 +20,12 @@ class EmailSendingServiceTest {
     private EmailSendingService emailSendingService;
 
     @Test
-    @DisplayName("Check if the method override send of the EmailSendingUseCase is invoked with successfully")
-    public void should_invock_the_method_send_of_EmailSendingUseCase_with_successfully() {
+    @DisplayName("Check if the method override 'send' of the EmailSendingUseCase is invoked with successfully")
+    public void should_invoke_the_method_send_of_EmailSendingUseCase_with_successfully() {
         emailSendingService.sendEmail("example@test.com", "test", "test");
+
         verify(emailSendingGateway, times(1)).sendEmail("example@test.com", "test", "test");
+        verifyNoMoreInteractions(emailSendingGateway);
     }
 
 }

@@ -22,10 +22,12 @@ class SesEmailSendingTest {
 
 
     @Test
-    @DisplayName("Check if the method override send of the EmailSendingGateway is invoked with successfully")
-    void should_invock_the_method_sendEmail_override_of_EmailSendingGateway_with_successfully() {
+    @DisplayName("Check if the method override 'send' of the EmailSendingGateway is invoked with successfully")
+    void should_invoke_the_method_sendEmail_override_of_EmailSendingGateway_with_successfully() {
         assertDoesNotThrow(() -> this.sesEmailSending.sendEmail("examble@test.com", "test", "test"));
+
         verify(this.amazonSimpleEmailService, times(1)).sendEmail(any());
+        verifyNoMoreInteractions(amazonSimpleEmailService);
 
     }
 
