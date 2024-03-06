@@ -40,30 +40,31 @@ public class TransactionService {
     @Autowired
     private WebhookService webhookService;
 
-    public void createDeposit(TransactionDTO withdrawDTO) {
-        if(Stream.of(withdrawDTO.idClient(), withdrawDTO.idCompany(), withdrawDTO.transactionValue(), withdrawDTO.tax(), withdrawDTO.transactionType()).anyMatch(Objects::isNull)){
+    public void createDeposit(TransactionDTO depositDTO) {
+        if(Stream.of(depositDTO.idClient(), depositDTO.idCompany(), depositDTO.transactionValue(), depositDTO.tax(), depositDTO.transactionType()).anyMatch(Objects::isNull)){
             throw new IllegalFieldException("There's some value absent is the body");
         }
-        if (!(withdrawDTO.transactionType().equals(TransactionType.DEPOSIT))) {
+        if (!(depositDTO.transactionType().equals(TransactionType.DEPOSIT))) {
             throw new RestException("Transaction type isn't deposit");
         }
-        Company company = companyService.getCompany(withdrawDTO);
-        Client client = clientService.getClient(withdrawDTO);
-        Transaction deposit = new Transaction(UUID.randomUUID(), withdrawDTO.transactionValue(),
-                withdrawDTO.tax(), client, company, LocalDateTime.now(), withdrawDTO.transactionType());
+        Company company = companyService.getCompany(depositDTO);
+        Client client = clientService.getClient(depositDTO);
 
-        this.checkBalanceClient(client, deposit);
+        Transaction deposit = new Transaction(UUID.randomUUID(), depositDTO.transactionValue(),
+                depositDTO.tax(), client, company, LocalDateTime.now(), depositDTO.transactionType());
 
-        BigDecimal tax = deposit.getValue().multiply(BigDecimal.valueOf(withdrawDTO.tax()));
+        BigDecimal tax = deposit.getValue().multiply(BigDecimal.valueOf(deposit.getTax()));
+        this.checkBalanceClient(client.getBalance(), deposit.getValue().add(tax));
+
         company.setBalance(company.getBalance().add(deposit.getValue().subtract(tax)));
         client.setBalance(client.getBalance().subtract(deposit.getValue()));
 
-        this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Deposit status", "Your deposit were done with successfully");
 
         clientService.saveClient(client);
         companyService.saveCompany(company);
         transactionRepository.save(deposit);
 
+        this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Deposit status", "Your deposit were done with successfully");
         webhookService.sendInfoTransaction(deposit);
     }
 
@@ -76,32 +77,32 @@ public class TransactionService {
         }
         Company company = companyService.getCompany(withdrawDTO);
         Client client = clientService.getClient(withdrawDTO);
+
         Transaction withdraw = new Transaction(UUID.randomUUID(), withdrawDTO.transactionValue(),
                 withdrawDTO.tax(), client, company, LocalDateTime.now(), withdrawDTO.transactionType());
 
-        this.checkBalanceCompany(company, withdraw);
+        BigDecimal tax = withdraw.getValue().multiply(BigDecimal.valueOf(withdraw.getTax()));
+        this.checkBalanceCompany(company.getBalance(), withdraw.getValue().add(tax));
 
-        BigDecimal tax = withdraw.getValue().multiply(BigDecimal.valueOf(withdrawDTO.tax()));
         company.setBalance(company.getBalance().subtract(withdraw.getValue().add(tax)));
         client.setBalance(client.getBalance().add(withdraw.getValue()));
-
-        this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Withdraw status", "Your withdraw were done with successfully");
 
         clientService.saveClient(client);
         companyService.saveCompany(company);
         transactionRepository.save(withdraw);
 
+        this.emailSendingService.sendEmail(SesEmailSending.EMAIL, "Withdraw status", "Your withdraw were done with successfully");
         webhookService.sendInfoTransaction(withdraw);
     }
 
-    private void checkBalanceClient(Client client, Transaction deposit) {
-        if (client.getBalance().compareTo(deposit.getValue()) < 0) {
+    private void checkBalanceClient(BigDecimal balance, BigDecimal valueTransaction) {
+        if (balance.compareTo(valueTransaction) < 0) {
             throw new RestException("Balance of the client insufficient");
         }
     }
 
-    private void checkBalanceCompany(Company company, Transaction withdraw) {
-        if (company.getBalance().compareTo(withdraw.getValue()) < 0) {
+    private void checkBalanceCompany(BigDecimal balance, BigDecimal valueTransaction) {
+        if (balance.compareTo(valueTransaction) < 0) {
             throw new RestException("Balance of the company insufficient");
         }
     }
