@@ -32,7 +32,7 @@ public class ClientService {
         this.saveClient(newClient);
     }
 
-    private String docFormatting(String document) {
+    public String docFormatting(String document) {
         if (document.length() != 11) {
             throw new IllegalFieldException("Quantity of characters of the document insufficient or exceeds the allowed");
         }
@@ -41,8 +41,8 @@ public class ClientService {
                 document.subSequence(6, 9), document.subSequence(9, 11));
     }
 
-    public Client getClient(TransactionDTO transactionDTO) {
-        return clientRepository.findClientById(transactionDTO.idClient()).orElseThrow(() -> new UserNotFound("Client not found"));
+    public Client getClient(String document) {
+        return clientRepository.findClientByDocument(document).orElseThrow(() -> new UserNotFound("Client not found"));
     }
 
     public void saveClient(Client client) {

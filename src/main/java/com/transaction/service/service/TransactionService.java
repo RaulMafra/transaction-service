@@ -41,14 +41,14 @@ public class TransactionService {
     private WebhookService webhookService;
 
     public void createDeposit(TransactionDTO depositDTO) {
-        if(Stream.of(depositDTO.idClient(), depositDTO.idCompany(), depositDTO.transactionValue(), depositDTO.tax(), depositDTO.transactionType()).anyMatch(Objects::isNull)){
+        if(Stream.of(depositDTO.docClient(), depositDTO.docCompany(), depositDTO.transactionValue(), depositDTO.tax(), depositDTO.transactionType()).anyMatch(Objects::isNull)){
             throw new IllegalFieldException("There's some value absent is the body");
         }
         if (!(depositDTO.transactionType().equals(TransactionType.DEPOSIT))) {
             throw new RestException("Transaction type isn't deposit");
         }
-        Company company = companyService.getCompany(depositDTO);
-        Client client = clientService.getClient(depositDTO);
+        Company company = companyService.getCompany(companyService.docFormatting(depositDTO.docCompany()));
+        Client client = clientService.getClient(clientService.docFormatting(depositDTO.docClient()));
 
         Transaction deposit = new Transaction(UUID.randomUUID(), depositDTO.transactionValue(),
                 depositDTO.tax(), client, company, LocalDateTime.now(), depositDTO.transactionType());
@@ -69,14 +69,14 @@ public class TransactionService {
     }
 
     public void createWithdraw(TransactionDTO withdrawDTO) {
-        if(Stream.of(withdrawDTO.idClient(), withdrawDTO.idCompany(), withdrawDTO.transactionValue(), withdrawDTO.tax(), withdrawDTO.transactionType()).anyMatch(Objects::isNull)){
+        if(Stream.of(withdrawDTO.docClient(), withdrawDTO.docCompany(), withdrawDTO.transactionValue(), withdrawDTO.tax(), withdrawDTO.transactionType()).anyMatch(Objects::isNull)){
             throw new IllegalFieldException("There's some value absent is the body");
         }
         if (!(withdrawDTO.transactionType().equals(TransactionType.WITHDRAW))) {
             throw new RestException("Transaction type isn't withdraw");
         }
-        Company company = companyService.getCompany(withdrawDTO);
-        Client client = clientService.getClient(withdrawDTO);
+        Company company = companyService.getCompany(companyService.docFormatting(withdrawDTO.docCompany()));
+        Client client = clientService.getClient(clientService.docFormatting(withdrawDTO.docClient()));
 
         Transaction withdraw = new Transaction(UUID.randomUUID(), withdrawDTO.transactionValue(),
                 withdrawDTO.tax(), client, company, LocalDateTime.now(), withdrawDTO.transactionType());

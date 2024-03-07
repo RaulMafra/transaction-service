@@ -33,7 +33,7 @@ public class CompanyService {
         this.saveCompany(newCompany);
     }
 
-    private String docFormatting(String document){
+    public String docFormatting(String document){
         if(document.length() != 14){
             throw new IllegalFieldException("Quantity of characters of the document insufficient or exceeds the allowed");
         }
@@ -43,8 +43,8 @@ public class CompanyService {
                 document.subSequence(12,14));
     }
 
-    public Company getCompany(TransactionDTO transactionDTO){
-        return companyRepository.findCompanyById(transactionDTO.idCompany()).orElseThrow(() -> new UserNotFound("Company not found"));
+    public Company getCompany(String document){
+        return companyRepository.findCompanyByDocument(document).orElseThrow(() -> new UserNotFound("Company not found"));
     }
 
     public void saveCompany(Company company){
