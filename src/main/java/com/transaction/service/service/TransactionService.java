@@ -44,9 +44,8 @@ public class TransactionService {
         if(Stream.of(depositDTO.docClient(), depositDTO.docCompany(), depositDTO.transactionValue(), depositDTO.tax(), depositDTO.transactionType()).anyMatch(Objects::isNull)){
             throw new IllegalFieldException("There's some value absent is the body");
         }
-        if (!(depositDTO.transactionType().equals(TransactionType.DEPOSIT))) {
-            throw new RestException("Transaction type isn't deposit");
-        }
+        this.checkInfoDeposit(depositDTO);
+
         Company company = companyService.getCompany(companyService.docFormatting(depositDTO.docCompany()));
         Client client = clientService.getClient(clientService.docFormatting(depositDTO.docClient()));
 
@@ -72,9 +71,8 @@ public class TransactionService {
         if(Stream.of(withdrawDTO.docClient(), withdrawDTO.docCompany(), withdrawDTO.transactionValue(), withdrawDTO.tax(), withdrawDTO.transactionType()).anyMatch(Objects::isNull)){
             throw new IllegalFieldException("There's some value absent is the body");
         }
-        if (!(withdrawDTO.transactionType().equals(TransactionType.WITHDRAW))) {
-            throw new RestException("Transaction type isn't withdraw");
-        }
+        this.checkInfoWithdraw(withdrawDTO);
+
         Company company = companyService.getCompany(companyService.docFormatting(withdrawDTO.docCompany()));
         Client client = clientService.getClient(clientService.docFormatting(withdrawDTO.docClient()));
 
@@ -104,6 +102,25 @@ public class TransactionService {
     private void checkBalanceCompany(BigDecimal balance, BigDecimal valueTransaction) {
         if (balance.compareTo(valueTransaction) < 0) {
             throw new RestException("Balance of the company insufficient");
+        }
+
+    }
+
+    private void checkInfoDeposit(TransactionDTO depositDTO){
+        if(depositDTO.transactionValue().compareTo(BigDecimal.ZERO) <= 0){
+            throw new RestException("Transaction value should be higher than zero");
+        }
+        if (!(depositDTO.transactionType().equals(TransactionType.DEPOSIT))) {
+            throw new RestException("Transaction type isn't deposit");
+        }
+    }
+
+    private void checkInfoWithdraw(TransactionDTO withdrawDTO){
+        if(withdrawDTO.transactionValue().compareTo(BigDecimal.ZERO) <= 0){
+            throw new RestException("Transaction value should be higher than zero");
+        }
+        if (!(withdrawDTO.transactionType().equals(TransactionType.WITHDRAW))) {
+            throw new RestException("Transaction type isn't withdraw");
         }
     }
 
