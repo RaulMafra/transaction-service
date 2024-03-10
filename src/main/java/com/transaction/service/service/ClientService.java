@@ -1,7 +1,6 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
 import com.transaction.service.exception.exceptions.UserNotFound;

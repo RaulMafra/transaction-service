@@ -1,10 +1,8 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.request.TransactionDTO;
 import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
-import com.transaction.service.exception.exceptions.RestException;
 import com.transaction.service.exception.exceptions.UserNotFound;
 import com.transaction.service.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
