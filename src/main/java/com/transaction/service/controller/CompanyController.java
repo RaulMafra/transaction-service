@@ -1,8 +1,8 @@
 package com.transaction.service.controller;
 
-import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.request.UserDTO;
-import com.transaction.service.dtos.response.TransactionMessageDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
+import com.transaction.service.dtos.response.ListCompanyDTO;
+import com.transaction.service.dtos.response.TransactionResponseDTO;
 import com.transaction.service.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,14 @@ public class CompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionMessageDTO> createCompany(@RequestBody UserDTO company){
+    public ResponseEntity<TransactionResponseDTO> createCompany(@RequestBody CreateUserDTO company){
         companyService.createCompany(company);
-        return new ResponseEntity<>(new TransactionMessageDTO("Created company with successfully"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new TransactionResponseDTO("Created company with successfully"), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Company>> listAllCompanies(){
-        List<Company> companies = companyService.listAllCompanies();
+    public ResponseEntity<List<ListCompanyDTO>> listAllCompanies(){
+        List<ListCompanyDTO> companies = companyService.listAllCompanies().stream().map(ListCompanyDTO::new).toList();
         return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 }
