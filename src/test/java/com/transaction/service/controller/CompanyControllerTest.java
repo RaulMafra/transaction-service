@@ -6,7 +6,6 @@ import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.service.CompanyService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,9 +21,7 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -56,7 +53,6 @@ class CompanyControllerTest {
 
     @SneakyThrows
     @Test
-    @DisplayName("Create a company with successfully and return status code 201")
     void should_create_a_company_and_return_status_code_201() {
         UserDTO company = new UserDTO("Example", "34345678000121",
                 "example@email.com", new BigDecimal(100));
@@ -75,9 +71,8 @@ class CompanyControllerTest {
 
     @SneakyThrows
     @Test
-    @DisplayName("Search a list of the companies e return status code 200")
     void should_return_a_list_of_the_companies_and_status_code_200() {
-        Company company = new Company(UUID.randomUUID(), "Example", "34345678000121", "example@test.com", new BigDecimal(0));
+        Company company = new Company(1L, "Example", "34345678000121", "example@test.com", new BigDecimal(0));
         List<Company> companies = new ArrayList<>(List.of(company));
 
         when(this.companyService.listAllCompanies()).thenReturn(companies);

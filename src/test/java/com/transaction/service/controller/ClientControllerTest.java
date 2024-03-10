@@ -6,7 +6,6 @@ import com.transaction.service.dtos.request.UserDTO;
 import com.transaction.service.service.ClientService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +21,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -54,7 +52,6 @@ class ClientControllerTest {
 
     @SneakyThrows
     @Test
-    @DisplayName("Create a client with successfully and return status code 201")
     void should_create_a_client_and_return_status_code_201() {
         UserDTO client = new UserDTO("Example", "12356678123",
                 "example@email.com", new BigDecimal(100));
@@ -75,9 +72,8 @@ class ClientControllerTest {
 
     @SneakyThrows
     @Test
-    @DisplayName("Search a list of the clients e return status code 200")
     void should_return_a_list_of_the_clients_and_status_code_200() {
-        Client client = new Client(UUID.randomUUID(), "example", "11111111100", "example@teste.com", new BigDecimal(0));
+        Client client = new Client(1L, "example", "11111111100", "example@teste.com", new BigDecimal(0));
         List<Client> clients = new ArrayList<>(List.of(client));
 
         when(this.clientService.listAllClients()).thenReturn(clients);

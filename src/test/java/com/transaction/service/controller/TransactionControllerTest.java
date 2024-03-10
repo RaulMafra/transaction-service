@@ -62,7 +62,7 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Created a deposit with successfully and return OK")
     void should_created_a_deposit_with_successfully_and_return_status_code_200() {
-        TransactionDTO deposit = new TransactionDTO(new BigDecimal(20), 0.03, UUID.randomUUID(), UUID.randomUUID(), TransactionType.DEPOSIT);
+        TransactionDTO deposit = new TransactionDTO(new BigDecimal(20), 0.03, "123456789100", "123456789111", TransactionType.DEPOSIT);
 
         doNothing().when(this.transactionService).createDeposit(deposit);
 
@@ -82,7 +82,7 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Created a withdraw with successfully and return OK")
     void should_created_a_withdraw_with_successfully_and_return_status_code_200() {
-        TransactionDTO withdraw = new TransactionDTO(new BigDecimal(20), 0.03, UUID.randomUUID(), UUID.randomUUID(), TransactionType.WITHDRAW);
+        TransactionDTO withdraw = new TransactionDTO(new BigDecimal(20), 0.03, "123456789100", "123456789111", TransactionType.WITHDRAW);
 
         doNothing().when(this.transactionService).createWithdraw(withdraw);
 
@@ -103,8 +103,8 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Return all transactions done and status code OK")
     void should_search_all_transactions_done_and_return_status_code_200() {
-        Client client = new Client(UUID.randomUUID(), "Client", "123456789100", "client@test.com", new BigDecimal(50));
-        Company company = new Company(UUID.randomUUID(), "Company", "34345678000121", "company@test.com", new BigDecimal(60));
+        Client client = new Client(1L, "Client", "123456789100", "client@test.com", new BigDecimal(50));
+        Company company = new Company(1L, "Company", "34345678000121", "company@test.com", new BigDecimal(60));
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(new Transaction(UUID.randomUUID(), new BigDecimal(10), 0.03, client, company, LocalDateTime.now(), TransactionType.WITHDRAW));

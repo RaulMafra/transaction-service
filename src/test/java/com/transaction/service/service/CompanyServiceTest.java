@@ -28,7 +28,6 @@ class CompanyServiceTest {
     private EntityManager entityManager;
 
     @Test
-    @DisplayName("Obtain a company created with successfully")
     void should_create_and_obtain_a_company_with_successfully() {
         UserDTO company = new UserDTO("Test", "34345678000123", "test@example.com", new BigDecimal(100));
 
@@ -41,7 +40,6 @@ class CompanyServiceTest {
     }
 
     @Test
-    @DisplayName("Failed in the creation of the company when the size document is different than 14 digits")
     void should_failed_to_the_create_a_company_when_size_document_different_of_the_14() {
         String document = "3434567800012300";
         UserDTO company = new UserDTO("Test", document, "test@example.com", new BigDecimal(10));
@@ -56,19 +54,18 @@ class CompanyServiceTest {
     }
 
     @Test
-    @DisplayName("Search with successfully all companies created")
-    void should_search_all_companies_created() {
+    void should_search_with_successfully_all_companies_created() {
         UserDTO company = new UserDTO("Test", "34345678000123", "test@example.com", new BigDecimal(80));
         UserDTO company2 = new UserDTO("Test2", "34345678000567", "test2@example.com", new BigDecimal(50));
 
-        Company newcompany = new Company(company);
-        Company newcompany2 = new Company(company2);
+        Company newCompany = new Company(company);
+        Company newCompany2 = new Company(company2);
 
-        assertDoesNotThrow(() -> newcompany.setDocument(this.docFormatting(newcompany.getDocument())));
-        assertDoesNotThrow(() -> newcompany2.setDocument(this.docFormatting(newcompany2.getDocument())));
+        assertDoesNotThrow(() -> newCompany.setDocument(this.docFormatting(newCompany.getDocument())));
+        assertDoesNotThrow(() -> newCompany2.setDocument(this.docFormatting(newCompany2.getDocument())));
 
-        this.saveCompany(newcompany);
-        this.saveCompany(newcompany2);
+        this.saveCompany(newCompany);
+        this.saveCompany(newCompany2);
 
         assertThat(this.companyRepository.findAll()).isNotEmpty();
 
@@ -77,7 +74,7 @@ class CompanyServiceTest {
     @DisplayName("Verify the amount of the characters of document and format this document")
     private String docFormatting(String document){
         if(document.length() != 14){
-            throw new IllegalFieldException("A quantidade de caracteres do documento excede o permitido");
+            throw new IllegalFieldException("Quantity of characters of the document insufficient or exceeds the allowed");
         }
         return String.format("%s.%s.%s/%s-%s",
                 document.subSequence(0,2), document.subSequence(2,5),
