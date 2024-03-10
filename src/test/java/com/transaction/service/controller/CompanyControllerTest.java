@@ -2,7 +2,7 @@ package com.transaction.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import com.transaction.service.service.CompanyService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class CompanyControllerTest {
     @SneakyThrows
     @Test
     void should_create_a_company_and_return_status_code_201() {
-        UserDTO company = new UserDTO("Example", "34345678000121",
+        CreateUserDTO company = new CreateUserDTO("Example", "34345678000121",
                 "example@email.com", new BigDecimal(100));
 
         mockMvc.perform(post(uri)

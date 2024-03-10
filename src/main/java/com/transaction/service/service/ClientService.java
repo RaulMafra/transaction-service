@@ -1,7 +1,7 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
 import com.transaction.service.exception.exceptions.UserNotFound;
 import com.transaction.service.repository.ClientRepository;
@@ -22,7 +22,7 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public void createClient(UserDTO client) {
+    public void createClient(CreateUserDTO client) {
         if (Stream.of(client.document(), client.name(), client.balance(), client.email()).anyMatch(Objects::isNull)) {
             throw new IllegalFieldException("There's some value absent in the body");
         }

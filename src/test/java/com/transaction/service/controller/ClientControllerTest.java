@@ -2,7 +2,7 @@ package com.transaction.service.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import com.transaction.service.service.ClientService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ class ClientControllerTest {
     @SneakyThrows
     @Test
     void should_create_a_client_and_return_status_code_201() {
-        UserDTO client = new UserDTO("Example", "12356678123",
+        CreateUserDTO client = new CreateUserDTO("Example", "12356678123",
                 "example@email.com", new BigDecimal(100));
 
         doNothing().when(clientService).createClient(client);

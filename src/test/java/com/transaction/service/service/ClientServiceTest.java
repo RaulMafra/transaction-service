@@ -1,7 +1,7 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
 import com.transaction.service.repository.ClientRepository;
 import jakarta.persistence.EntityManager;
@@ -30,7 +30,7 @@ class ClientServiceTest {
 
     @Test
     void should_create_and_obtain_a_client_with_successfully() {
-        UserDTO client = new UserDTO("Test", "11111111100", "test@example.com", new BigDecimal(80));
+        CreateUserDTO client = new CreateUserDTO("Test", "11111111100", "test@example.com", new BigDecimal(80));
 
         Client newClient = new Client(client);
         assertDoesNotThrow(() -> newClient.setDocument(this.docFormatting(newClient.getDocument())));
@@ -42,7 +42,7 @@ class ClientServiceTest {
 
     @Test
     void should_failed_to_the_create_a_client_when_size_document_different_of_the_11() {
-        UserDTO client = new UserDTO("Test", "9999999999900", "test@example.com", new BigDecimal(80));
+        CreateUserDTO client = new CreateUserDTO("Test", "9999999999900", "test@example.com", new BigDecimal(80));
 
         Client newClient = new Client(client);
         assertThrows(IllegalFieldException.class, () -> newClient.setDocument(this.docFormatting(newClient.getDocument())),
@@ -56,8 +56,8 @@ class ClientServiceTest {
 
     @Test
     void should_search_with_successfully_all_clients_created() {
-        UserDTO client = new UserDTO("Test", "11111111100", "test@example.com", new BigDecimal(80));
-        UserDTO client2 = new UserDTO("Test2", "22111111100", "test2@example.com", new BigDecimal(50));
+        CreateUserDTO client = new CreateUserDTO("Test", "11111111100", "test@example.com", new BigDecimal(80));
+        CreateUserDTO client2 = new CreateUserDTO("Test2", "22111111100", "test2@example.com", new BigDecimal(50));
 
         Client newClient = new Client(client);
         Client newClient2 = new Client(client2);

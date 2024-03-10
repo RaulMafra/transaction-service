@@ -1,7 +1,7 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
 import com.transaction.service.exception.exceptions.UserNotFound;
 import com.transaction.service.repository.CompanyRepository;
@@ -22,7 +22,7 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public void createCompany(UserDTO company){
+    public void createCompany(CreateUserDTO company){
         if(Stream.of(company.document(), company.email(), company.name(), company.balance()).anyMatch(Objects::isNull)){
             throw new IllegalFieldException("There's some value absent in the body");
         }

@@ -1,6 +1,6 @@
 package com.transaction.service.domain.user;
 
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +31,11 @@ public class Client {
     private BigDecimal balance;
 
 
-    public Client(UserDTO userDTO){
-        this.name = userDTO.name();
-        this.document = userDTO.document();
-        this.email = userDTO.email();
-        this.balance = userDTO.balance();
+    public Client(CreateUserDTO createUserDTO){
+        this.name = createUserDTO.name();
+        this.document = createUserDTO.document();
+        this.email = createUserDTO.email();
+        this.balance = createUserDTO.balance();
     }
 
 }

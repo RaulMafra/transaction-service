@@ -1,7 +1,7 @@
 package com.transaction.service.service;
 
 import com.transaction.service.domain.user.Company;
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import com.transaction.service.exception.exceptions.IllegalFieldException;
 import com.transaction.service.repository.CompanyRepository;
 import jakarta.persistence.EntityManager;
@@ -29,7 +29,7 @@ class CompanyServiceTest {
 
     @Test
     void should_create_and_obtain_a_company_with_successfully() {
-        UserDTO company = new UserDTO("Test", "34345678000123", "test@example.com", new BigDecimal(100));
+        CreateUserDTO company = new CreateUserDTO("Test", "34345678000123", "test@example.com", new BigDecimal(100));
 
         Company newCompany = new Company(company);
         assertDoesNotThrow(() -> newCompany.setDocument(docFormatting(newCompany.getDocument())));
@@ -42,7 +42,7 @@ class CompanyServiceTest {
     @Test
     void should_failed_to_the_create_a_company_when_size_document_different_of_the_14() {
         String document = "3434567800012300";
-        UserDTO company = new UserDTO("Test", document, "test@example.com", new BigDecimal(10));
+        CreateUserDTO company = new CreateUserDTO("Test", document, "test@example.com", new BigDecimal(10));
 
         Company newCompany = new Company(company);
         assertThrows(IllegalFieldException.class, () -> newCompany.setDocument(docFormatting(newCompany.getDocument())),
@@ -55,8 +55,8 @@ class CompanyServiceTest {
 
     @Test
     void should_search_with_successfully_all_companies_created() {
-        UserDTO company = new UserDTO("Test", "34345678000123", "test@example.com", new BigDecimal(80));
-        UserDTO company2 = new UserDTO("Test2", "34345678000567", "test2@example.com", new BigDecimal(50));
+        CreateUserDTO company = new CreateUserDTO("Test", "34345678000123", "test@example.com", new BigDecimal(80));
+        CreateUserDTO company2 = new CreateUserDTO("Test2", "34345678000567", "test2@example.com", new BigDecimal(50));
 
         Company newCompany = new Company(company);
         Company newCompany2 = new Company(company2);

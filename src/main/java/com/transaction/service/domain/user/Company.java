@@ -1,6 +1,6 @@
 package com.transaction.service.domain.user;
 
-import com.transaction.service.dtos.request.UserDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class Company {
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    public Company(UserDTO company){
+    public Company(CreateUserDTO company){
         this.name = company.name();
         this.document = company.document();
         this.email = company.email();
