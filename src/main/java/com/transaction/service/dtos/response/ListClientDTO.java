@@ -1,4 +1,6 @@
 package com.transaction.service.dtos.response;
 
-public record ListUserDTO() {
+import com.transaction.service.domain.user.Client;
+
+public record ListClientDTO(Client client) {
 }

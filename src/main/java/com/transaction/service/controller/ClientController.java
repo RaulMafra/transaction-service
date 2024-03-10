@@ -1,8 +1,9 @@
 package com.transaction.service.controller;
 
 import com.transaction.service.domain.user.Client;
-import com.transaction.service.dtos.request.UserDTO;
-import com.transaction.service.dtos.response.TransactionMessageDTO;
+import com.transaction.service.dtos.request.CreateUserDTO;
+import com.transaction.service.dtos.response.ListClientDTO;
+import com.transaction.service.dtos.response.TransactionResponseDTO;
 import com.transaction.service.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,15 +24,15 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionMessageDTO> createClient(@RequestBody UserDTO userDTO){
-        clientService.createClient(userDTO);
-        return new ResponseEntity<>(new TransactionMessageDTO("Created client with successfully"), HttpStatus.CREATED);
+    public ResponseEntity<TransactionResponseDTO> createClient(@RequestBody CreateUserDTO createUserDTO){
+        clientService.createClient(createUserDTO);
+        return new ResponseEntity<>(new TransactionResponseDTO("Created client with successfully"), HttpStatus.CREATED);
     }
 
 
     @GetMapping
-    public ResponseEntity<List<Client>> listAllClients(){
-        List<Client> clients = clientService.listAllClients();
+    public ResponseEntity<List<ListClientDTO>> listAllClients(){
+        List<ListClientDTO> clients = clientService.listAllClients().stream().map(ListClientDTO::new).toList();
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 }
